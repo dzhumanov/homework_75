@@ -16,13 +16,29 @@ export default function Home() {
 
   const encodeMutation = useMutation({
     mutationFn: async (messageData: postProps) => {
-      await axiosApi.post("/vigenere/encode", messageData);
+      const response = await axiosApi.post("/vigenere/encode", messageData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setState((prevState) => ({
+        ...prevState,
+        decoded: '',
+        encoded: data.encoded,
+      }));
     },
   });
 
   const decodeMutation = useMutation({
     mutationFn: async (messageData: postProps) => {
-      await axiosApi.post("/vigenere/decode", messageData);
+      const response = await axiosApi.post("/vigenere/decode", messageData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setState((prevState) => ({
+        ...prevState,
+        encoded: '',
+        decoded: data.decoded,
+      }));
     },
   });
 
@@ -40,19 +56,18 @@ export default function Home() {
 
   const onDecode = async () => {
     const messageObj = {
-      "message": state.encoded,
-      "password": state.password,
+      message: state.encoded,
+      password: state.password,
     };
     await decodeMutation.mutateAsync(messageObj);
   };
 
   const onEncode = async () => {
     const messageObj = {
-      "message": state.decoded,
-      "password": state.password,
+      message: state.decoded,
+      password: state.password,
     };
     await encodeMutation.mutateAsync(messageObj);
-    
   };
 
   return (

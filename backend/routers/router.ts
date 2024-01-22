@@ -7,14 +7,22 @@ codeRouter.post("/encode", async (req, res) => {
   const codedWord = req.body.message;
   const password = req.body.password;
   const codedText = Vigenere.Cipher(password).crypt(codedWord);
-  res.send(codedText);
+
+  const responseObj = {
+    encoded: codedText,
+  }
+  res.send(responseObj);
 });
 
 codeRouter.post("/decode", async (req, res) => {
   const codedWord = req.body.message;
   const password = req.body.password;
   const decodedText = Vigenere.Decipher(password).crypt(codedWord);
-  res.send(decodedText);
+
+  const responseObj = {
+    decoded: decodedText,
+  }
+  res.send(responseObj);
 });
 
 export default codeRouter;
