@@ -72,10 +72,9 @@ export default function Home() {
 
   return (
     <form onSubmit={onSubmit}>
-      <Grid container direction="column" spacing={2}>
         <Grid
-          item
           container
+          spacing={2}
           justifyContent="space-between"
           direction="column"
           alignItems="center"
@@ -83,7 +82,7 @@ export default function Home() {
           <Grid item>
             <Typography variant="h4">Cipher</Typography>
           </Grid>
-          <Grid item>
+          <Grid item width={500}>
             <TextField
               multiline
               rows={3}
@@ -94,8 +93,8 @@ export default function Home() {
               onChange={inputChangeHandler}
             />
           </Grid>
-          <Grid item container justifyContent="center" alignItems="center">
-            <Grid item>
+          <Grid item container width={500} justifyContent="center" alignItems="center">
+            <Grid item flexGrow={1}>
               <Grid item xs>
                 <TextField
                   required
@@ -116,7 +115,7 @@ export default function Home() {
               </IconButton>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item width={500}>
             <TextField
               multiline
               rows={3}
@@ -128,7 +127,6 @@ export default function Home() {
             />
           </Grid>
         </Grid>
-      </Grid>
     </form>
   );
 }

@@ -16,7 +16,7 @@ const AppToolbar = () => {
     <AppBar position="sticky" sx={{ mb: 2 }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link href="/">Compstore</Link>
+          <Link href="/">Code your message with Cypher</Link>
         </Typography>
       </Toolbar>
     </AppBar>

@@ -18,6 +18,21 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <CssBaseline />
           <html lang="en">
+            <head>
+              <style>
+                {`
+                    html, body {
+                        height: 100%;
+                    }
+                    body {
+                        background-image: url('https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt158572ec37653cf3/5eb7cdc19df5cf37047009d1/V_AGENTS_587x900_Cypher.png');
+                        background-repeat: no-repeat;
+                        background-position: left 20% center;
+                        background-size: 25%;
+                    }
+                `}
+              </style>
+            </head>
             <body>
               <header>
                 <AppToolbar />
