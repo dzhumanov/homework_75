@@ -1,40 +1,119 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import axiosApi from "../axiosApi";
-import {
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, Icon, IconButton, TextField, Typography } from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { postProps, stateProps } from "../types";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Home() {
+  const [state, setState] = useState<stateProps>({
+    encoded: "",
+    decoded: "",
+    password: "",
+  });
+
+  const encodeMutation = useMutation({
+    mutationFn: async (messageData: postProps) => {
+      await axiosApi.post("/vigenere/encode", messageData);
+    },
+  });
+
+  const decodeMutation = useMutation({
+    mutationFn: async (messageData: postProps) => {
+      await axiosApi.post("/vigenere/decode", messageData);
+    },
+  });
+
+  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  const onDecode = async () => {
+    const messageObj = {
+      "message": state.encoded,
+      "password": state.password,
+    };
+    await decodeMutation.mutateAsync(messageObj);
+  };
+
+  const onEncode = async () => {
+    const messageObj = {
+      "message": state.decoded,
+      "password": state.password,
+    };
+    await encodeMutation.mutateAsync(messageObj);
+    
+  };
+
   return (
-    <Grid container direction="column" spacing={2}>
-      <Grid item container justifyContent="space-between" alignItems="center">
-        <Grid item>
-          <Typography variant="h4">Products</Typography>
-        </Grid>
-        <Grid item>
-          <TextField
-            required
-            multiline
-            rows={3}
-            id="description"
-            label="Description"
-            name="description"
-          />
-        </Grid>
-        <Grid item>
-          <TextField
-            required
-            multiline
-            rows={3}
-            id="description"
-            label="Description"
-            name="description"
-          />
+    <form onSubmit={onSubmit}>
+      <Grid container direction="column" spacing={2}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          direction="column"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography variant="h4">Cipher</Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              multiline
+              rows={3}
+              id="decoded"
+              label="Decoded message"
+              name="decoded"
+              value={state.decoded}
+              onChange={inputChangeHandler}
+            />
+          </Grid>
+          <Grid item container justifyContent="center" alignItems="center">
+            <Grid item>
+              <Grid item xs>
+                <TextField
+                  required
+                  id="password"
+                  label="Password"
+                  name="password"
+                  value={state.password}
+                  onChange={inputChangeHandler}
+                />
+              </Grid>
+            </Grid>
+            <Grid item>
+              <IconButton type="submit" onClick={onDecode}>
+                <ArrowUpwardIcon />
+              </IconButton>
+              <IconButton type="submit" onClick={onEncode}>
+                <ArrowDownwardIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <TextField
+              multiline
+              rows={3}
+              id="encoded"
+              label="Encoded message"
+              name="encoded"
+              value={state.encoded}
+              onChange={inputChangeHandler}
+            />
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </form>
   );
 }
